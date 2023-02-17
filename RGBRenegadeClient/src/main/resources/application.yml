@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/RGBRenegadeAuth
+    username: RGBAuthUser
+    password: Test123!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+app:
+  jwt:
+    secret: FancynessWerktOokSomsBestGoedDusJahDanMaarDitHetMoetWelEenGrootStukLangerOmGeldigTeZijnWatHetNuOngeveerIsNotReal
+    issuer: rgb-renegade-auth
+    expiration:
+      minutes: 10
+    refresh:
+      expiration:
+        minutes: 20
+  cors:
+    allowedOrigins: http://localhost:3000,http://localhost:8080,http://localhost:8081
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect

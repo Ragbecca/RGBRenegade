@@ -1,0 +1,39 @@
+package com.ragbecca.renegadeclient.security;
+
+import com.ragbecca.renegadeclient.exception.ResourceNotFoundException;
+import com.ragbecca.renegadeclient.models.User;
+import com.ragbecca.renegadeclient.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class RGBUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with email : " + email)
+                );
+
+        return UserPrincipal.create(user);
+    }
+
+    @Transactional
+    public UserDetails loadUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+
+        return UserPrincipal.create(user);
+    }
+}
