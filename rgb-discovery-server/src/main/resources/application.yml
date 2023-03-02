@@ -1,0 +1,19 @@
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  renewalPercentThreshold: 0.85
+
+spring:
+  application:
+    name: rgb-discovery-server
+
+app:
+  eureka:
+    username: ${EUREKA_USERNAME:rgbIsLit}
+    password: ${EUREKA_PASSWORD:maarPasswordsZijnLitter}

@@ -14,8 +14,14 @@
     </properties>
 
     <modules>
-        <module>RGBRenegadeClient</module>
-        <module>RGBRenegadeResource</module>
+        <module>rgb-character-service</module>
+        <module>rgb-player-service</module>
+        <module>rgb-discovery-server</module>
+        <module>rgb-api-gateway</module>
+        <module>rgb-auth-service</module>
+        <module>rgb-mail-service</module>
+        <module>rgb-mail-kafka-service</module>
+        <module>rgb-messaging-service</module>
     </modules>
 
 </project>

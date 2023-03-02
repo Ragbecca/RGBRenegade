@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+</head>
+<body>
+<p>
+    Hello, <span th:text="${name}">Peter Static</span>!
+</p>
+<p>
+    You have successfully created an account to <b>RGB-Renegade</b> on
+    <span th:text="${subscriptionDate}">28-12-2012</span>
+</p>
+<p>Click the following link to verify your email!</p>
+<a th:href="@{${verificationURL}}">Click to verify!</a>
+<p>
+    Regards, <br/>
+    <em>Ragbecca</em>
+</p>
+</body>
+</html>

@@ -1,0 +1,20 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/RGBRenegadeCharacter
+    username: RGBResourceUser1
+    password: Test123!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  application:
+    name: rgb-character-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://rgbIsLit:maarPasswordsZijnLitter@localhost:8761/eureka
