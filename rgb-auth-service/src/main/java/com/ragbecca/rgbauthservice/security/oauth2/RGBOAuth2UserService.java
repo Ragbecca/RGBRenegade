@@ -18,7 +18,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,7 +44,7 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-        if (StringUtils.isEmpty(oAuth2UserInfo.getEmail()) &&
+        if (oAuth2UserInfo.getEmail().isEmpty() &&
                 !(Objects.equals(oAuth2UserRequest.getClientRegistration().getClientName().toLowerCase(), AuthProvider.github.name()))) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
@@ -53,8 +52,11 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
         Optional<User> userOptional = userRepository.findByUsername(oAuth2UserInfo.getEmail() == null
                 ? oAuth2User.getAttributes().get("login").toString() : oAuth2UserInfo.getEmail());
         User user;
+
+        // TODO: SPLIT
         if (userOptional.isPresent()) {
             user = userOptional.get();
+            // TODO user provider fix
             if (!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
                 throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
                         user.getProvider() + " account. Please use your " + user.getProvider() +
@@ -67,9 +69,9 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
                 user = updateExistingUser(user, oAuth2UserInfo);
             }
         } else {
-            if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
+            if (oAuth2UserInfo.getEmail().isEmpty()) {
                 GithubUserRequestRegister githubUserRequest = new GithubUserRequestRegister(oAuth2User.getAttributes().get("login").toString());
-                user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo, githubUserRequest);
+                user = registerNewUserGithub(oAuth2UserRequest, oAuth2UserInfo, githubUserRequest);
             } else {
                 user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
             }
@@ -78,6 +80,7 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
+    // TODO CREATE HELPER INSTEAD OF DUPLICATE CODE
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
 
@@ -91,7 +94,7 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
         return userRepository.save(user);
     }
 
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, GithubUserRequestRegister githubUserRequest) {
+    private User registerNewUserGithub(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, GithubUserRequestRegister githubUserRequest) {
         User user = new User();
 
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));

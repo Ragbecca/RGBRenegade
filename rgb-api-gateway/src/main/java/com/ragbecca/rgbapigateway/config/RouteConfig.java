@@ -35,6 +35,9 @@ public class RouteConfig {
                 .route("rgb-messaging-sockjs-service", p -> p
                         .path("/api/chat/**")
                         .uri("lb://rgb-messaging-service"))
+                .route("rgb-image-service", p -> p
+                        .path("/api/image/**")
+                        .uri("lb://rgb-image-service"))
                 .build();
     }
 }

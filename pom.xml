@@ -22,6 +22,7 @@
         <module>rgb-mail-service</module>
         <module>rgb-mail-kafka-service</module>
         <module>rgb-messaging-service</module>
+        <module>rgb-image-service</module>
     </modules>
 
 </project>

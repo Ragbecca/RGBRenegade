@@ -26,7 +26,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins(allowedOrigins).withSockJS();
         registry.addEndpoint("/ws-chat")
                 .setHandshakeHandler(new DefaultHandshakeHandler(upgradeStrategy))
-                .setAllowedOrigins("*");
+                .setAllowedOrigins(allowedOrigins);
     }
 
     @Override

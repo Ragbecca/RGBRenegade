@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
+                .fromCurrentContextPath().path("api/userInfo/user/me")
                 .buildAndExpand(result.getId()).toUri();
 
         EmailVerificationRequest emailVerificationRequest = new EmailVerificationRequest(

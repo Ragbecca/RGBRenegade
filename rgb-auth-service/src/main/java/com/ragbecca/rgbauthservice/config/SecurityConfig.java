@@ -79,6 +79,7 @@ public class SecurityConfig {
         http.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
         http.authorizeHttpRequests()
                 .requestMatchers("/", "/error", "/img/*.png", "/favicon.ico").permitAll()
+                .requestMatchers("/api/userInfo/user/image/upload").permitAll()
                 .requestMatchers("/auth/**", "/oauth2/**").permitAll()
                 .requestMatchers("/test/**").permitAll()
                 .anyRequest().authenticated();
