@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 public interface ChatService {
 
     ResponseEntity<?> sendMessage(Message message);
+
+    ResponseEntity<?> getAllMessages();
 }

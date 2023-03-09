@@ -117,7 +117,6 @@ public class AuthServiceImpl implements AuthService {
                 .map(RefreshToken::getUser)
                 .map(user -> {
                     String token = jwtTokenUtil.generateTokenFromUsername(user.getUsername());
-                    refreshTokenService.deleteByUserId(user.getId());
                     RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
                     return ResponseEntity.ok(new JwtResponse(token, refreshToken.getToken(), user.getId(),
                             user.getUsername(), user.getName(), user.getImageUrl(), Collections.singletonList(user.getRole())));
@@ -150,8 +149,6 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "You are not logged in"));
         }
 
-        User user = userRepository.findByUsername(username).get();
-        refreshTokenService.deleteByUserId(user.getId());
         return ResponseEntity.ok()
                 .body(new ApiResponse(true, "User logout successfully!"));
     }

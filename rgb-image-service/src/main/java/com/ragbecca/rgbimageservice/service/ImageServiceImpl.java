@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -34,5 +35,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image getImage(String id) {
         return imageRepository.findById(id).get();
+    }
+
+    @Override
+    public Optional<Image> getImageFromUsername(String username) {
+        return imageRepository.findByTitle(username);
     }
 }

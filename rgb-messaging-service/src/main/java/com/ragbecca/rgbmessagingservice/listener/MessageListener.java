@@ -12,7 +12,7 @@ public class MessageListener {
     @Autowired
     SimpMessagingTemplate template;
 
-    @KafkaListener(topics = KafkaConstants.KAFKA_TOPIC, groupId = KafkaConstants.GROUP_ID)
+    @KafkaListener(topics = KafkaConstants.KAFKA_TOPIC, groupId = KafkaConstants.GROUP_ID, containerFactory = "kafkaListenerContainerFactory")
     public void processMessage(Message message) {
         this.template.convertAndSend("/topic/group", message);
     }

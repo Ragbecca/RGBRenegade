@@ -1,5 +1,6 @@
 package com.ragbecca.rgbauthservice.security.oauth2;
 
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import com.ragbecca.rgbauthservice.util.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
 
         cookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, cookieUtils.serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
         String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-        if (redirectUriAfterLogin.isBlank()) {
+        if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
             cookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS);
         }
     }

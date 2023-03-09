@@ -73,6 +73,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
+        System.out.println(getDefaultTargetUrl());
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());

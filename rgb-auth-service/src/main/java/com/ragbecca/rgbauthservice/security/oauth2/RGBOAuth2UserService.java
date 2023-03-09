@@ -44,7 +44,7 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-        if (oAuth2UserInfo.getEmail().isEmpty() &&
+        if (oAuth2UserInfo.getEmail() == null &&
                 !(Objects.equals(oAuth2UserRequest.getClientRegistration().getClientName().toLowerCase(), AuthProvider.github.name()))) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
@@ -63,13 +63,13 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
                         " account to login.");
             }
             if (oAuth2UserInfo.getName() == null) {
-                GithubUserRequest githubUserRequest = new GithubUserRequest(oAuth2User.getAttributes().get("login").toString(), oAuth2UserInfo.getImageUrl());
+                GithubUserRequest githubUserRequest = new GithubUserRequest(oAuth2User.getAttributes().get("login").toString());
                 user = updateExistingUserWithCustomName(user, githubUserRequest);
             } else {
                 user = updateExistingUser(user, oAuth2UserInfo);
             }
         } else {
-            if (oAuth2UserInfo.getEmail().isEmpty()) {
+            if (oAuth2UserInfo.getEmail() == null) {
                 GithubUserRequestRegister githubUserRequest = new GithubUserRequestRegister(oAuth2User.getAttributes().get("login").toString());
                 user = registerNewUserGithub(oAuth2UserRequest, oAuth2UserInfo, githubUserRequest);
             } else {
@@ -88,7 +88,7 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
         user.setProviderId(oAuth2UserInfo.getId());
         user.setName(oAuth2UserInfo.getName());
         user.setUsername(oAuth2UserInfo.getEmail());
-        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setImageUrl(null);
         user.setEmailVerified(true);
         user.setRole("USER");
         return userRepository.save(user);
@@ -101,7 +101,7 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
         user.setProviderId(oAuth2UserInfo.getId());
         user.setName(githubUserRequest.getUsername());
         user.setUsername(githubUserRequest.getUsername());
-        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setImageUrl(null);
         user.setEmailVerified(true);
         user.setRole("USER");
         return userRepository.save(user);
@@ -109,13 +109,13 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
         existingUser.setName(oAuth2UserInfo.getName());
-        existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
+        existingUser.setImageUrl(null);
         return userRepository.save(existingUser);
     }
 
     private User updateExistingUserWithCustomName(User existingUser, GithubUserRequest githubUserRequest) {
         existingUser.setName(githubUserRequest.getName());
-        existingUser.setImageUrl(githubUserRequest.getImageUrl());
+        existingUser.setImageUrl(null);
         return userRepository.save(existingUser);
     }
 
@@ -131,7 +131,6 @@ public class RGBOAuth2UserService extends DefaultOAuth2UserService {
     @AllArgsConstructor
     private static class GithubUserRequest {
         private String name;
-        private String imageUrl;
     }
 
 }

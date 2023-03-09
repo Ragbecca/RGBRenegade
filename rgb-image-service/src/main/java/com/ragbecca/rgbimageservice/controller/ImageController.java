@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
 @RestController
@@ -64,5 +65,19 @@ public class ImageController {
 
         return ResponseEntity.ok()
                 .body(encoder.encodeToString(image.getImage().getData()));
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/get-user", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<String> getPhotoUser(@RequestParam String username) {
+        Optional<Image> image = imageService.getImageFromUsername(username);
+
+        if (image.isPresent()) {
+            Base64.Encoder encoder = Base64.getEncoder();
+            return ResponseEntity.ok()
+                    .body(encoder.encodeToString(image.get().getImage().getData()));
+        } else {
+            return ResponseEntity.ok().body("Not found");
+        }
     }
 }
