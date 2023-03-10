@@ -49,8 +49,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider();
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(rgbUserDetailsService);
         return provider;
@@ -79,9 +78,7 @@ public class SecurityConfig {
         http.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
         http.authorizeHttpRequests()
                 .requestMatchers("/", "/error", "/img/*.png", "/favicon.ico").permitAll()
-                .requestMatchers("/api/userInfo/user/image/upload").permitAll()
                 .requestMatchers("/auth/**", "/oauth2/**").permitAll()
-                .requestMatchers("/test/**").permitAll()
                 .anyRequest().authenticated();
         http.oauth2Login().authorizationEndpoint()
                 .baseUri("/oauth2/authorize").authorizationRequestRepository(cookieAuthorizationRequestRepository()).and()

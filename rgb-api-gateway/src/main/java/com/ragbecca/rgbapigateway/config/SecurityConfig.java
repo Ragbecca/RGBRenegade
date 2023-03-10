@@ -41,6 +41,8 @@ public class SecurityConfig {
         http.cors();
         http.authorizeExchange(exchange ->
                 exchange.pathMatchers("/eureka/**").permitAll()
+                        .pathMatchers("/api/character/admin/**", "/api/character/view/all/**",
+                                "/api/character/view/all").hasRole("ADMIN")
                         .anyExchange().authenticated()).oauth2ResourceServer().bearerTokenConverter(resolver).jwt().jwtDecoder(jwtDecoder());
         return http.build();
     }
